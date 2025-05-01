@@ -50,6 +50,35 @@ FPS = 60
 
 UTILS_CONTENT = 'BLACK = (0, 0, 0)'
 
+SCENE_MANAGER_CONTENT = '''from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from scene import Scene
+
+class SceneManager:
+    def __init__(self):
+        self.scenes = {}
+        self.current_scene = None
+
+    def add_scene(self, scene:'Scene'):
+        self.scenes[scene.name] = scene
+
+    def remove_scene(self, scene:'Scene'):
+        self.scenes.pop(scene.name)
+
+    def change_scene(self, name:str):
+        self.current_scene = self.scenes[name]'''
+
+SCENE_CONTENT = '''from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from scene_manager import SceneManager
+
+class Scene:
+    def __init__(self, manager:'SceneManager', name:str):
+        self.manager = manager
+        self.name = name'''
+
 def make_file(filename:str, content:str):
     with open(filename, 'w', encoding='UTF-8') as file:
         file.write(content)
@@ -68,6 +97,8 @@ def init_files():
     make_file('src/main.py', MAIN_CONTENT)
     make_file('src/settings.py', SETTINGS_CONTENT)
     make_file('src/utils.py', UTILS_CONTENT)
+    make_file('src/scenes/scene_manager.py', SCENE_MANAGER_CONTENT)
+    make_file('src/scenes/scene.py', SCENE_CONTENT)
 
 def init_packages(packages:list):
     command = ['pip', 'install'] + packages
